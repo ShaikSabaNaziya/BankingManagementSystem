@@ -1,5 +1,8 @@
 package model;
 
+import exception.InsufficientBalanceException;
+import exception.InvalidAmountException;
+
 import interfaces.TransactionOperations;
 
 public class SavingsAccount extends BankAccount  {
@@ -14,16 +17,20 @@ public class SavingsAccount extends BankAccount  {
     }
 
     @Override
-    public void withdraw(double amount) {
+    public void withdraw(double amount)
+            throws InvalidAmountException,
+                InsufficientBalanceException {
 
         if (amount <= 0) {
-            System.out.println("Withdrawal amount must be greater than zero.");
-            return;
+            throw new InvalidAmountException(
+                    "Withdrawal amount must be greater than zero."
+            );
         }
 
         if (amount > getBalance()) {
-            System.out.println("Insufficient balance.");
-            return;
+            throw new InsufficientBalanceException(
+                    "Insufficient balance."
+            );
         }
 
         setBalance(getBalance() - amount);
@@ -31,36 +38,39 @@ public class SavingsAccount extends BankAccount  {
         addTransaction("WITHDRAW", amount);
 
         System.out.println("Withdrawal successful.");
-        System.out.println("Current balance: ₹" + getBalance());
+        System.out.println(
+                "Current balance: ₹" + getBalance()
+        );
     }
 
     @Override
-    public void transfer(BankAccount receiver, double amount) {
+    public void transfer(BankAccount receiver, double amount)
+            throws InvalidAmountException,
+                InsufficientBalanceException {
 
         if (amount <= 0) {
-            System.out.println(
+            throw new InvalidAmountException(
                     "Transfer amount must be greater than zero."
             );
-            return;
         }
 
         if (amount > getBalance()) {
-            System.out.println(
+            throw new InsufficientBalanceException(
                     "Insufficient balance for transfer."
             );
-            return;
         }
 
         setBalance(getBalance() - amount);
 
-        addTransaction("TRANSFER TO ACCOUNT "
-                + receiver.getAccountNumber(), amount);
+        addTransaction(
+                "TRANSFER TO ACCOUNT "
+                + receiver.getAccountNumber(),
+                amount
+        );
 
         receiver.deposit(amount);
 
-        System.out.println(
-                "Transfer successful."
-        );
+        System.out.println("Transfer successful.");
     }
 
     @Override

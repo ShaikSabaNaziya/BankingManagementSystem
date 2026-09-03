@@ -1,5 +1,8 @@
 package model;
 
+import exception.InsufficientBalanceException;
+import exception.InvalidAmountException;
+
 import interfaces.TransactionOperations;
 
 public class CurrentAccount extends BankAccount  {
@@ -14,59 +17,63 @@ public class CurrentAccount extends BankAccount  {
     }
 
     @Override
-    public void withdraw(double amount) {
+    public void withdraw(double amount)
+            throws InvalidAmountException,
+                InsufficientBalanceException {
 
         if (amount <= 0) {
-            System.out.println("Withdrawal amount must be greater than zero.");
-            return;
+            throw new InvalidAmountException(
+                    "Withdrawal amount must be greater than zero."
+            );
         }
 
         if (getBalance() - amount < MINIMUM_BALANCE) {
-            System.out.println(
-                "Withdrawal failed. Minimum balance of ₹"
-                + MINIMUM_BALANCE
-                + " must be maintained."
+            throw new InsufficientBalanceException(
+                    "Minimum balance of ₹"
+                    + MINIMUM_BALANCE
+                    + " must be maintained."
             );
-            return;
         }
 
         setBalance(getBalance() - amount);
+
+        addTransaction("WITHDRAW", amount);
 
         System.out.println("Withdrawal successful.");
-        System.out.println("Current balance: ₹" + getBalance());
-    }
-
-    @Override
-    public void transfer(BankAccount receiver, double amount) {
-
-        if (amount <= 0) {
-            System.out.println(
-                    "Transfer amount must be greater than zero."
-            );
-            return;
-        }
-
-        if (amount > getBalance()) {
-            System.out.println(
-                    "Insufficient balance for transfer."
-            );
-            return;
-        }
-
-        setBalance(getBalance() - amount);
-
-        addTransaction("TRANSFER TO ACCOUNT "
-                + receiver.getAccountNumber(), amount);
-
-        receiver.deposit(amount);
-
         System.out.println(
-                "Transfer successful."
+                "Current balance: ₹" + getBalance()
         );
     }
 
     @Override
-    public double calculateInterest() {
-        return 0;
+    public void transfer(BankAccount receiver, double amount)
+            throws InvalidAmountException,
+                InsufficientBalanceException {
+
+        if (amount <= 0) {
+            throw new InvalidAmountException(
+                    "Transfer amount must be greater than zero."
+            );
+        }
+
+        if (getBalance() - amount < MINIMUM_BALANCE) {
+            throw new InsufficientBalanceException(
+                    "Transfer failed. Minimum balance of ₹"
+                    + MINIMUM_BALANCE
+                    + " must be maintained."
+            );
+        }
+
+        setBalance(getBalance() - amount);
+
+        addTransaction(
+                "TRANSFER TO ACCOUNT "
+                + receiver.getAccountNumber(),
+                amount
+        );
+
+        receiver.deposit(amount);
+
+        System.out.println("Transfer successful.");
     }
 }

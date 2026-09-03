@@ -1,3 +1,5 @@
+import exception.InsufficientBalanceException;
+import exception.InvalidAmountException;
 import model.BankAccount;
 import model.SavingsAccount;
 import model.CurrentAccount;
@@ -5,8 +7,6 @@ import model.CurrentAccount;
 public class Main {
 
     public static void main(String[] args) {
-
-        // Runtime Polymorphism
 
         BankAccount account1 =
                 new SavingsAccount(1001, "Saba", 10000);
@@ -23,16 +23,27 @@ public class Main {
 
         account1.displayAccountDetails();
 
-        System.out.println("\nDepositing ₹5000...");
-        account1.deposit(5000);
+        try {
 
-        System.out.println("\nWithdrawing ₹3000...");
-        account1.withdraw(3000);
+            System.out.println("\nDepositing ₹5000...");
+            account1.deposit(5000);
 
-        System.out.println(
-                "\nInterest: ₹" +
-                account1.calculateInterest()
-        );
+            System.out.println("\nWithdrawing ₹3000...");
+            account1.withdraw(3000);
+
+            System.out.println(
+                    "\nInterest: ₹" +
+                    account1.calculateInterest()
+            );
+
+        } catch (InvalidAmountException |
+                 InsufficientBalanceException e) {
+
+            System.out.println(
+                    "Transaction failed: " +
+                    e.getMessage()
+            );
+        }
 
         account1.displayTransactionHistory();
 
@@ -45,16 +56,27 @@ public class Main {
 
         account2.displayAccountDetails();
 
-        System.out.println("\nDepositing ₹5000...");
-        account2.deposit(5000);
+        try {
 
-        System.out.println("\nWithdrawing ₹3000...");
-        account2.withdraw(3000);
+            System.out.println("\nDepositing ₹5000...");
+            account2.deposit(5000);
 
-        System.out.println(
-                "\nInterest: ₹" +
-                account2.calculateInterest()
-        );
+            System.out.println("\nWithdrawing ₹3000...");
+            account2.withdraw(3000);
+
+            System.out.println(
+                    "\nInterest: ₹" +
+                    account2.calculateInterest()
+            );
+
+        } catch (InvalidAmountException |
+                 InsufficientBalanceException e) {
+
+            System.out.println(
+                    "Transaction failed: " +
+                    e.getMessage()
+            );
+        }
 
         account2.displayTransactionHistory();
 
@@ -65,38 +87,67 @@ public class Main {
 
         System.out.println("\n===== TRANSFER TEST =====");
 
-        System.out.println("\nBefore transfer:");
+        try {
 
-        System.out.println(
-                "Savings balance: ₹" +
-                account1.getBalance()
-        );
+            System.out.println("\nBefore transfer:");
 
-        System.out.println(
-                "Current balance: ₹" +
-                account2.getBalance()
-        );
+            System.out.println(
+                    "Savings balance: ₹" +
+                    account1.getBalance()
+            );
 
-        System.out.println("\nTransferring ₹2000...");
+            System.out.println(
+                    "Current balance: ₹" +
+                    account2.getBalance()
+            );
 
-        account1.transfer(account2, 2000);
+            System.out.println("\nTransferring ₹2000...");
 
-        System.out.println("\nAfter transfer:");
+            account1.transfer(account2, 2000);
 
-        System.out.println(
-                "Savings balance: ₹" +
-                account1.getBalance()
-        );
+            System.out.println("\nAfter transfer:");
 
-        System.out.println(
-                "Current balance: ₹" +
-                account2.getBalance()
-        );
+            System.out.println(
+                    "Savings balance: ₹" +
+                    account1.getBalance()
+            );
 
-        System.out.println("\nSavings Transaction History:");
-        account1.displayTransactionHistory();
+            System.out.println(
+                    "Current balance: ₹" +
+                    account2.getBalance()
+            );
 
-        System.out.println("\nCurrent Transaction History:");
-        account2.displayTransactionHistory();
+        } catch (InvalidAmountException |
+                 InsufficientBalanceException e) {
+
+            System.out.println(
+                    "Transfer failed: " +
+                    e.getMessage()
+            );
+        }
+
+
+        // =========================
+        // EXCEPTION TEST
+        // =========================
+
+        System.out.println("\n===== EXCEPTION TEST =====");
+
+        try {
+
+            System.out.println(
+                    "\nTrying to withdraw ₹50000..."
+            );
+
+            account1.withdraw(50000);
+
+        } catch (InvalidAmountException |
+                 InsufficientBalanceException e) {
+
+            System.out.println(
+                    "Transaction failed: " +
+                    e.getMessage()
+            );
+        }
     }
 }

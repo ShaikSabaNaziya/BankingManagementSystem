@@ -5,6 +5,8 @@ import java.util.List;
 
 import interfaces.TransactionOperations;
 
+import exception.InvalidAmountException;
+
 public abstract class BankAccount implements TransactionOperations {
     private int accountNumber;
     private String accountHolderName;
@@ -21,13 +23,14 @@ public abstract class BankAccount implements TransactionOperations {
         this.transactions = new ArrayList<>();
     }
     
-    public void deposit(double amount) {
+    @Override
+    public void deposit(double amount)
+            throws InvalidAmountException {
 
         if (amount <= 0) {
-            System.out.println(
+            throw new InvalidAmountException(
                     "Deposit amount must be greater than zero."
             );
-            return;
         }
 
         balance += amount;
@@ -39,6 +42,7 @@ public abstract class BankAccount implements TransactionOperations {
         System.out.println("Amount deposited successfully.");
         System.out.println("Current balance: ₹" + balance);
     }
+
 
     public abstract void withdraw(double amount);
 

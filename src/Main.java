@@ -57,5 +57,46 @@ public class Main {
         );
 
         account2.displayTransactionHistory();
+
+
+        // =========================
+        // TRANSFER
+        // =========================
+
+        System.out.println("\n===== TRANSFER TEST =====");
+
+        System.out.println("\nBefore transfer:");
+
+        System.out.println(
+                "Savings balance: ₹" +
+                account1.getBalance()
+        );
+
+        System.out.println(
+                "Current balance: ₹" +
+                account2.getBalance()
+        );
+
+        System.out.println("\nTransferring ₹2000...");
+
+        account1.transfer(account2, 2000);
+
+        System.out.println("\nAfter transfer:");
+
+        System.out.println(
+                "Savings balance: ₹" +
+                account1.getBalance()
+        );
+
+        System.out.println(
+                "Current balance: ₹" +
+                account2.getBalance()
+        );
+
+        System.out.println("\nSavings Transaction History:");
+        account1.displayTransactionHistory();
+
+        System.out.println("\nCurrent Transaction History:");
+        account2.displayTransactionHistory();
     }
 }

@@ -3,7 +3,9 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class BankAccount {
+import interfaces.TransactionOperations;
+
+public abstract class BankAccount implements TransactionOperations {
     private int accountNumber;
     private String accountHolderName;
     private double balance;

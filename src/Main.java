@@ -7,7 +7,6 @@ public class Main {
     public static void main(String[] args) {
 
         // Runtime Polymorphism
-        // Parent class reference pointing to child class objects
 
         BankAccount account1 =
                 new SavingsAccount(1001, "Saba", 10000);
@@ -31,8 +30,11 @@ public class Main {
         account1.withdraw(3000);
 
         System.out.println(
-                "\nInterest: ₹" + account1.calculateInterest()
+                "\nInterest: ₹" +
+                account1.calculateInterest()
         );
+
+        account1.displayTransactionHistory();
 
 
         // =========================
@@ -50,7 +52,10 @@ public class Main {
         account2.withdraw(3000);
 
         System.out.println(
-                "\nInterest: ₹" + account2.calculateInterest()
+                "\nInterest: ₹" +
+                account2.calculateInterest()
         );
+
+        account2.displayTransactionHistory();
     }
 }

@@ -26,6 +26,8 @@ public class SavingsAccount extends BankAccount {
 
         setBalance(getBalance() - amount);
 
+        addTransaction("WITHDRAW", amount);
+
         System.out.println("Withdrawal successful.");
         System.out.println("Current balance: ₹" + getBalance());
     }

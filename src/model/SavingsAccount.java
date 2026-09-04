@@ -3,79 +3,103 @@ package model;
 import exception.InsufficientBalanceException;
 import exception.InvalidAmountException;
 
-import interfaces.TransactionOperations;
-
-public class SavingsAccount extends BankAccount  {
+public class SavingsAccount extends BankAccount {
 
     private static final double INTEREST_RATE = 4.0;
 
-    public SavingsAccount(int accountNumber,
-                          String accountHolderName,
-                          double balance) {
+    public SavingsAccount(
+            int accountNumber,
+            String accountHolderName,
+            double balance) {
 
-        super(accountNumber, accountHolderName, balance);
+        super(
+                accountNumber,
+                accountHolderName,
+                balance
+        );
     }
 
     @Override
     public void withdraw(double amount)
             throws InvalidAmountException,
-                InsufficientBalanceException {
+                   InsufficientBalanceException {
 
         if (amount <= 0) {
+
             throw new InvalidAmountException(
                     "Withdrawal amount must be greater than zero."
             );
         }
 
         if (amount > getBalance()) {
+
             throw new InsufficientBalanceException(
                     "Insufficient balance."
             );
         }
 
-        setBalance(getBalance() - amount);
+        setBalance(
+                getBalance() - amount
+        );
 
-        addTransaction("WITHDRAW", amount);
+        addTransaction(
+                "WITHDRAW",
+                amount
+        );
 
-        System.out.println("Withdrawal successful.");
         System.out.println(
-                "Current balance: ₹" + getBalance()
+                "Withdrawal successful."
+        );
+
+        System.out.println(
+                "Current balance: ₹" +
+                getBalance()
         );
     }
 
     @Override
-    public void transfer(BankAccount receiver, double amount)
+    public double calculateInterest() {
+
+        return getBalance()
+                * INTEREST_RATE
+                / 100;
+    }
+
+    @Override
+    public void transfer(
+            BankAccount receiver,
+            double amount)
             throws InvalidAmountException,
-                InsufficientBalanceException {
+                   InsufficientBalanceException {
 
         if (amount <= 0) {
+
             throw new InvalidAmountException(
                     "Transfer amount must be greater than zero."
             );
         }
 
         if (amount > getBalance()) {
+
             throw new InsufficientBalanceException(
                     "Insufficient balance for transfer."
             );
         }
 
-        setBalance(getBalance() - amount);
+        setBalance(
+                getBalance() - amount
+        );
 
         addTransaction(
-                "TRANSFER TO ACCOUNT "
-                + receiver.getAccountNumber(),
+                "TRANSFER TO ACCOUNT " +
+                receiver.getAccountNumber(),
                 amount
         );
 
         receiver.deposit(amount);
 
-        System.out.println("Transfer successful.");
-    }
-
-    @Override
-    public double calculateInterest() {
-
-        return getBalance() * INTEREST_RATE / 100;
+        System.out.println(
+                "Transfer successful."
+        );
     }
 }

@@ -13,7 +13,9 @@ public interface TransactionOperations {
             throws InvalidAmountException,
                    InsufficientBalanceException;
 
-    void transfer(BankAccount receiver, double amount)
+    void transfer(
+            BankAccount receiver,
+            double amount)
             throws InvalidAmountException,
                    InsufficientBalanceException;
 }

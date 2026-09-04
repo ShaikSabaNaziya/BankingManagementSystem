@@ -9,6 +9,7 @@ public class Transaction {
     private LocalDateTime dateTime;
 
     public Transaction(String type, double amount) {
+
         this.type = type;
         this.amount = amount;
         this.dateTime = LocalDateTime.now();
@@ -18,7 +19,8 @@ public class Transaction {
 
         System.out.println(
                 dateTime + " | "
-                + type + " | ₹" + amount
+                + type + " | ₹"
+                + amount
         );
     }
 }

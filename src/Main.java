@@ -1,100 +1,219 @@
+
+import java.util.Scanner;
+
+import exception.AccountNotFoundException;
 import exception.InsufficientBalanceException;
 import exception.InvalidAmountException;
+
+import model.AccountType;
 import model.BankAccount;
-import model.SavingsAccount;
-import model.CurrentAccount;
+
 import service.Bank;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        // Create Bank
+        Scanner scanner = new Scanner(System.in);
+
         Bank bank = new Bank();
 
+        boolean running = true;
 
-        // =========================
-        // CREATE ACCOUNTS
-        // =========================
+        while (running) {
 
-        BankAccount account1 =
-                new SavingsAccount(
-                        1001,
-                        "Saba",
-                        10000
-                );
+            displayMenu();
 
-        BankAccount account2 =
-                new CurrentAccount(
-                        2001,
-                        "Saba",
-                        20000
-                );
+            System.out.print("Enter your choice: ");
 
+            int choice = scanner.nextInt();
+            scanner.nextLine();
 
-        // Add accounts to bank
-        bank.addAccount(account1);
-        bank.addAccount(account2);
+            switch (choice) {
 
+                case 1:
+                    createAccount(scanner, bank);
+                    break;
 
-        // =========================
-        // DISPLAY ALL ACCOUNTS
-        // =========================
+                case 2:
+                    depositMoney(scanner, bank);
+                    break;
 
-        bank.displayAllAccounts();
+                case 3:
+                    withdrawMoney(scanner, bank);
+                    break;
 
+                case 4:
+                    checkBalance(scanner, bank);
+                    break;
 
-        // =========================
-        // FIND ACCOUNT
-        // =========================
+                case 5:
+                    bank.displayAllAccounts();
+                    break;
 
-        System.out.println("\n===== ACCOUNT SEARCH =====");
+                case 6:
+                    transferMoney(scanner, bank);
+                    break;
 
-        BankAccount searchedAccount =
-                bank.findAccount(1001);
+                case 7:
+                    displayTransactions(scanner, bank);
+                    break;
 
-        if (searchedAccount != null) {
+                case 8:
+                    System.out.println(
+                            "\nThank you for using the Banking Management System."
+                    );
+                    running = false;
+                    break;
 
-            searchedAccount.displayAccountDetails();
+                default:
+                    System.out.println(
+                            "Invalid choice. Please try again."
+                    );
+            }
+        }
+
+        scanner.close();
+    }
+
+    private static void displayMenu() {
+
+        System.out.println("\n================================");
+        System.out.println("       BANKING MANAGEMENT SYSTEM");
+        System.out.println("================================");
+
+        System.out.println("1. Create Account");
+        System.out.println("2. Deposit Money");
+        System.out.println("3. Withdraw Money");
+        System.out.println("4. Check Balance");
+        System.out.println("5. Display All Accounts");
+        System.out.println("6. Transfer Money");
+        System.out.println("7. Transaction History");
+        System.out.println("8. Exit");
+
+        System.out.println("================================");
+    }
+
+    private static void createAccount(
+            Scanner scanner,
+            Bank bank) {
+
+        System.out.println("\n===== CREATE ACCOUNT =====");
+
+        System.out.print("Enter customer name: ");
+        String name = scanner.nextLine();
+
+        System.out.print("Enter phone number: ");
+        String phone = scanner.nextLine();
+
+        System.out.println("\nSelect account type:");
+        System.out.println("1. Savings");
+        System.out.println("2. Current");
+
+        System.out.print("Enter choice: ");
+        int typeChoice = scanner.nextInt();
+
+        AccountType accountType;
+
+        if (typeChoice == 1) {
+
+            accountType = AccountType.SAVINGS;
+
+        } else if (typeChoice == 2) {
+
+            accountType = AccountType.CURRENT;
 
         } else {
 
             System.out.println(
-                    "Account not found."
+                    "Invalid account type."
             );
+
+            return;
         }
 
+        System.out.print("Enter initial deposit: ");
+        double initialDeposit = scanner.nextDouble();
 
-        // =========================
-        // DEPOSIT
-        // =========================
+        BankAccount account =
+                bank.createAccount(
+                        name,
+                        phone,
+                        accountType,
+                        initialDeposit
+                );
 
-        System.out.println("\n===== DEPOSIT =====");
+        if (account != null) {
+
+            System.out.println(
+                    "Account Number: " +
+                    account.getAccountNumber()
+            );
+        }
+    }
+
+    private static void depositMoney(
+            Scanner scanner,
+            Bank bank) {
+
+        System.out.println("\n===== DEPOSIT MONEY =====");
+
+        System.out.print(
+                "Enter account number: "
+        );
+
+        int accountNumber = scanner.nextInt();
 
         try {
 
-            searchedAccount.deposit(5000);
+            BankAccount account =
+                    bank.findAccount(accountNumber);
 
-        } catch (InvalidAmountException e) {
+            System.out.print(
+                    "Enter amount: "
+            );
+
+            double amount = scanner.nextDouble();
+
+            account.deposit(amount);
+
+        } catch (AccountNotFoundException |
+                 InvalidAmountException e) {
 
             System.out.println(
                     "Deposit failed: " +
                     e.getMessage()
             );
         }
+    }
 
+    private static void withdrawMoney(
+            Scanner scanner,
+            Bank bank) {
 
-        // =========================
-        // WITHDRAW
-        // =========================
+        System.out.println("\n===== WITHDRAW MONEY =====");
 
-        System.out.println("\n===== WITHDRAW =====");
+        System.out.print(
+                "Enter account number: "
+        );
+
+        int accountNumber = scanner.nextInt();
 
         try {
 
-            searchedAccount.withdraw(2000);
+            BankAccount account =
+                    bank.findAccount(accountNumber);
 
-        } catch (InvalidAmountException |
+            System.out.print(
+                    "Enter amount: "
+            );
+
+            double amount = scanner.nextDouble();
+
+            account.withdraw(amount);
+
+        } catch (AccountNotFoundException |
+                 InvalidAmountException |
                  InsufficientBalanceException e) {
 
             System.out.println(
@@ -102,25 +221,88 @@ public class Main {
                     e.getMessage()
             );
         }
+    }
 
+    private static void checkBalance(
+            Scanner scanner,
+            Bank bank) {
 
-        // =========================
-        // TRANSFER
-        // =========================
+        System.out.println("\n===== CHECK BALANCE =====");
 
-        System.out.println("\n===== TRANSFER =====");
+        System.out.print(
+                "Enter account number: "
+        );
 
-        BankAccount receiver =
-                bank.findAccount(2001);
+        int accountNumber = scanner.nextInt();
 
         try {
 
-            searchedAccount.transfer(
-                    receiver,
-                    2000
+            BankAccount account =
+                    bank.findAccount(accountNumber);
+
+            System.out.println(
+                    "\nAccount Holder: " +
+                    account.getAccountHolderName()
             );
 
-        } catch (InvalidAmountException |
+            System.out.println(
+                    "Account Number: " +
+                    account.getAccountNumber()
+            );
+
+            System.out.println(
+                    "Balance: ₹" +
+                    account.getBalance()
+            );
+
+        } catch (AccountNotFoundException e) {
+
+            System.out.println(
+                    "Account lookup failed: " +
+                    e.getMessage()
+            );
+        }
+    }
+
+    private static void transferMoney(
+            Scanner scanner,
+            Bank bank) {
+
+        System.out.println("\n===== TRANSFER MONEY =====");
+
+        System.out.print(
+                "Enter sender account number: "
+        );
+
+        int senderNumber = scanner.nextInt();
+
+        System.out.print(
+                "Enter receiver account number: "
+        );
+
+        int receiverNumber = scanner.nextInt();
+
+        try {
+
+            BankAccount sender =
+                    bank.findAccount(senderNumber);
+
+            BankAccount receiver =
+                    bank.findAccount(receiverNumber);
+
+            System.out.print(
+                    "Enter transfer amount: "
+            );
+
+            double amount = scanner.nextDouble();
+
+            sender.transfer(
+                    receiver,
+                    amount
+            );
+
+        } catch (AccountNotFoundException |
+                 InvalidAmountException |
                  InsufficientBalanceException e) {
 
             System.out.println(
@@ -128,16 +310,36 @@ public class Main {
                     e.getMessage()
             );
         }
+    }
 
-
-        // =========================
-        // FINAL ACCOUNT DETAILS
-        // =========================
+    private static void displayTransactions(
+            Scanner scanner,
+            Bank bank) {
 
         System.out.println(
-                "\n===== FINAL ACCOUNT DETAILS ====="
+                "\n===== TRANSACTION HISTORY ====="
         );
 
-        bank.displayAllAccounts();
+        System.out.print(
+                "Enter account number: "
+        );
+
+        int accountNumber = scanner.nextInt();
+
+        try {
+
+            BankAccount account =
+                    bank.findAccount(accountNumber);
+
+            account.displayTransactionHistory();
+
+        } catch (AccountNotFoundException e) {
+
+            System.out.println(
+                    "Transaction history failed: " +
+                    e.getMessage()
+            );
+        }
     }
 }
+

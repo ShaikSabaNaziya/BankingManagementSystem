@@ -270,7 +270,7 @@ public class Main {
 
             System.out.println(
                     "\nAccount Holder: " +
-                    account.getAccountHolderName()
+                    account.getCustomer().getName()
             );
 
             System.out.println(

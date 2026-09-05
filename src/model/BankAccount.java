@@ -11,18 +11,18 @@ public abstract class BankAccount
         implements TransactionOperations {
 
     private int accountNumber;
-    private String accountHolderName;
+    private Customer customer;
     private double balance;
 
     private List<Transaction> transactions;
 
     public BankAccount(
             int accountNumber,
-            String accountHolderName,
+            Customer customer,
             double balance) {
 
         this.accountNumber = accountNumber;
-        this.accountHolderName = accountHolderName;
+        this.customer = customer;
         this.balance = balance;
 
         this.transactions = new ArrayList<>();
@@ -75,9 +75,9 @@ public abstract class BankAccount
         return accountNumber;
     }
 
-    public String getAccountHolderName() {
+    public Customer getCustomer() {
 
-        return accountHolderName;
+        return customer;
     }
 
     public double getBalance() {
@@ -113,7 +113,18 @@ public abstract class BankAccount
         );
 
         System.out.println(
-                "Account Holder : " + accountHolderName
+                "Customer ID    : " +
+                customer.getCustomerId()
+        );
+
+        System.out.println(
+                "Account Holder : " +
+                customer.getName()
+        );
+
+        System.out.println(
+                "Phone          : " +
+                customer.getPhone()
         );
 
         System.out.println(

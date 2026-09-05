@@ -9,12 +9,12 @@ public class SavingsAccount extends BankAccount {
 
     public SavingsAccount(
             int accountNumber,
-            String accountHolderName,
+            Customer customer,
             double balance) {
 
         super(
                 accountNumber,
-                accountHolderName,
+                customer,
                 balance
         );
     }

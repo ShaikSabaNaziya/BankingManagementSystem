@@ -9,12 +9,12 @@ public class CurrentAccount extends BankAccount {
 
     public CurrentAccount(
             int accountNumber,
-            String accountHolderName,
+            Customer customer,
             double balance) {
 
         super(
                 accountNumber,
-                accountHolderName,
+                customer,
                 balance
         );
     }

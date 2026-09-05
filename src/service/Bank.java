@@ -3,31 +3,36 @@ package service;
 import java.util.HashMap;
 import java.util.Map;
 
+import exception.AccountNotFoundException;
 import model.AccountType;
 import model.BankAccount;
 import model.CurrentAccount;
+import model.Customer;
 import model.SavingsAccount;
-
-import exception.AccountNotFoundException;
 
 public class Bank {
 
     private Map<Integer, BankAccount> accounts;
 
     private static int nextAccountNumber = 1001;
+    private static int nextCustomerId = 1;
 
     public Bank() {
         accounts = new HashMap<>();
     }
 
     public int generateAccountNumber() {
-
         return nextAccountNumber++;
+    }
+
+    public int generateCustomerId() {
+        return nextCustomerId++;
     }
 
     public boolean addAccount(BankAccount account) {
 
-        if (accounts.containsKey(account.getAccountNumber())) {
+        if (accounts.containsKey(
+                account.getAccountNumber())) {
 
             System.out.println(
                     "Account number already exists."
@@ -49,13 +54,17 @@ public class Bank {
     }
 
     public BankAccount findAccount(int accountNumber)
-        throws AccountNotFoundException {
+            throws AccountNotFoundException {
 
-    BankAccount account = accounts.get(accountNumber);
+        BankAccount account =
+                accounts.get(accountNumber);
 
         if (account == null) {
+
             throw new AccountNotFoundException(
-                    "Account " + accountNumber + " not found."
+                    "Account " +
+                    accountNumber +
+                    " not found."
             );
         }
 
@@ -63,59 +72,92 @@ public class Bank {
     }
 
     public BankAccount createAccount(
-        String name,
-        String phone,
-        AccountType accountType,
-        double initialDeposit) {
+            String name,
+            String phone,
+            AccountType accountType,
+            double initialDeposit) {
 
-        if (name == null || name.trim().isEmpty()) {
-            System.out.println("Customer name cannot be empty.");
+        if (name == null ||
+                name.trim().isEmpty()) {
+
+            System.out.println(
+                    "Customer name cannot be empty."
+            );
+
             return null;
         }
 
-        if (phone == null || phone.trim().isEmpty()) {
-            System.out.println("Phone number cannot be empty.");
+        if (phone == null ||
+                phone.trim().isEmpty()) {
+
+            System.out.println(
+                    "Phone number cannot be empty."
+            );
+
             return null;
         }
 
         if (accountType == null) {
-            System.out.println("Account type is required.");
+
+            System.out.println(
+                    "Account type is required."
+            );
+
             return null;
         }
 
         if (initialDeposit <= 0) {
+
             System.out.println(
                     "Initial deposit must be greater than zero."
             );
+
             return null;
         }
 
-        if (accountType == AccountType.CURRENT && initialDeposit < 1000) {
+        if (accountType == AccountType.CURRENT
+                && initialDeposit < 1000) {
+
             System.out.println(
-                    "Current Account requires a minimum initial deposit of 1000."
+                    "Current Account requires a minimum " +
+                    "initial deposit of ₹1000."
             );
+
             return null;
         }
 
-        int accountNumber = generateAccountNumber();
+        int customerId =
+                generateCustomerId();
+
+        Customer customer =
+                new Customer(
+                        customerId,
+                        name,
+                        phone
+                );
+
+        int accountNumber =
+                generateAccountNumber();
 
         BankAccount account;
 
         if (accountType == AccountType.SAVINGS) {
 
-            account = new SavingsAccount(
-                    accountNumber,
-                    name,
-                    initialDeposit
-            );
+            account =
+                    new SavingsAccount(
+                            accountNumber,
+                            customer,
+                            initialDeposit
+                    );
 
         } else {
 
-            account = new CurrentAccount(
-                    accountNumber,
-                    name,
-                    initialDeposit
-            );
+            account =
+                    new CurrentAccount(
+                            accountNumber,
+                            customer,
+                            initialDeposit
+                    );
         }
 
         if (addAccount(account)) {
@@ -140,7 +182,8 @@ public class Bank {
             return;
         }
 
-        for (BankAccount account : accounts.values()) {
+        for (BankAccount account :
+                accounts.values()) {
 
             account.displayAccountDetails();
         }

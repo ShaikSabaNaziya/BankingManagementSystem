@@ -188,4 +188,11 @@ public class Bank {
             account.displayAccountDetails();
         }
     }
+
+    public boolean isSameAccount(
+            int senderNumber,
+            int receiverNumber) {
+
+        return senderNumber == receiverNumber;
+    }
 }

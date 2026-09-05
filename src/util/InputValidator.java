@@ -21,7 +21,7 @@ public class InputValidator {
             }
 
             System.out.println(
-                    "Invalid input. Please enter a number."
+                    "Invalid input. Please enter a valid number."
             );
 
             scanner.nextLine();
@@ -41,7 +41,15 @@ public class InputValidator {
                 double value = scanner.nextDouble();
                 scanner.nextLine();
 
-                return value;
+                if (Double.isFinite(value)) {
+                    return value;
+                }
+
+                System.out.println(
+                        "Invalid amount. Please enter a finite number."
+                );
+
+                continue;
             }
 
             System.out.println(
@@ -84,13 +92,51 @@ public class InputValidator {
             String phone =
                     scanner.nextLine().trim();
 
-            if (phone.matches("\\d{10}")) {
+            if (phone.matches("[6-9]\\d{9}")) {
                 return phone;
             }
 
             System.out.println(
                     "Invalid phone number. " +
-                    "Please enter exactly 10 digits."
+                    "Please enter a valid 10-digit Indian mobile number."
+            );
+        }
+    }
+
+    public static int readPositiveInt(
+            Scanner scanner,
+            String message) {
+
+        while (true) {
+
+            int value =
+                    readInt(scanner, message);
+
+            if (value > 0) {
+                return value;
+            }
+
+            System.out.println(
+                    "Value must be greater than zero."
+            );
+        }
+    }
+
+    public static double readPositiveAmount(
+            Scanner scanner,
+            String message) {
+
+        while (true) {
+
+            double value =
+                    readDouble(scanner, message);
+
+            if (value > 0) {
+                return value;
+            }
+
+            System.out.println(
+                    "Amount must be greater than zero."
             );
         }
     }

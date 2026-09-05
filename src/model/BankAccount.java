@@ -41,11 +41,10 @@ public abstract class BankAccount
 
         balance += amount;
 
-        transactions.add(
-                new Transaction(
-                        "DEPOSIT",
-                        amount
-                )
+        addTransaction(
+                TransactionType.DEPOSIT,
+                amount,
+                "Cash deposit"
         );
 
         System.out.println(
@@ -53,7 +52,8 @@ public abstract class BankAccount
         );
 
         System.out.println(
-                "Current balance: ₹" + balance
+                "Current balance: ₹" +
+                balance
         );
     }
 
@@ -71,33 +71,31 @@ public abstract class BankAccount
                    InsufficientBalanceException;
 
     public int getAccountNumber() {
-
         return accountNumber;
     }
 
     public Customer getCustomer() {
-
         return customer;
     }
 
     public double getBalance() {
-
         return balance;
     }
 
     protected void setBalance(double balance) {
-
         this.balance = balance;
     }
 
     protected void addTransaction(
-            String type,
-            double amount) {
+            TransactionType type,
+            double amount,
+            String description) {
 
         transactions.add(
                 new Transaction(
                         type,
-                        amount
+                        amount,
+                        description
                 )
         );
     }
@@ -109,7 +107,8 @@ public abstract class BankAccount
         );
 
         System.out.println(
-                "Account Number : " + accountNumber
+                "Account Number : " +
+                accountNumber
         );
 
         System.out.println(
@@ -128,7 +127,8 @@ public abstract class BankAccount
         );
 
         System.out.println(
-                "Balance        : ₹" + balance
+                "Balance        : ₹" +
+                balance
         );
     }
 
@@ -147,7 +147,8 @@ public abstract class BankAccount
             return;
         }
 
-        for (Transaction transaction : transactions) {
+        for (Transaction transaction :
+                transactions) {
 
             transaction.displayTransaction();
         }

@@ -5,7 +5,7 @@ import exception.InvalidAmountException;
 
 public class SavingsAccount extends BankAccount {
 
-    private static final double INTEREST_RATE = 4.0;
+    private static final double INTEREST_RATE = 0.04;
 
     public SavingsAccount(
             int accountNumber,
@@ -43,12 +43,13 @@ public class SavingsAccount extends BankAccount {
         );
 
         addTransaction(
-                "WITHDRAW",
-                amount
+                TransactionType.WITHDRAW,
+                amount,
+                "Cash withdrawal"
         );
 
         System.out.println(
-                "Withdrawal successful."
+                "Amount withdrawn successfully."
         );
 
         System.out.println(
@@ -60,9 +61,7 @@ public class SavingsAccount extends BankAccount {
     @Override
     public double calculateInterest() {
 
-        return getBalance()
-                * INTEREST_RATE
-                / 100;
+        return getBalance() * INTEREST_RATE;
     }
 
     @Override
@@ -71,6 +70,13 @@ public class SavingsAccount extends BankAccount {
             double amount)
             throws InvalidAmountException,
                    InsufficientBalanceException {
+
+        if (receiver == null) {
+
+            throw new InvalidAmountException(
+                    "Receiver account cannot be null."
+            );
+        }
 
         if (amount <= 0) {
 
@@ -91,15 +97,37 @@ public class SavingsAccount extends BankAccount {
         );
 
         addTransaction(
-                "TRANSFER TO ACCOUNT " +
-                receiver.getAccountNumber(),
-                amount
+                TransactionType.TRANSFER_SENT,
+                amount,
+                "To Account " +
+                receiver.getAccountNumber()
         );
 
-        receiver.deposit(amount);
+        receiver.addTransaction(
+                TransactionType.TRANSFER_RECEIVED,
+                amount,
+                "From Account " +
+                getAccountNumber()
+        );
+
+        receiver.setBalance(
+                receiver.getBalance() + amount
+        );
 
         System.out.println(
-                "Transfer successful."
+                "Transfer completed successfully."
+        );
+
+        System.out.println(
+                "Transferred ₹" +
+                amount +
+                " to Account " +
+                receiver.getAccountNumber()
+        );
+
+        System.out.println(
+                "Current balance: ₹" +
+                getBalance()
         );
     }
 }

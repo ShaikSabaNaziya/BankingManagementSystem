@@ -5,7 +5,7 @@ import exception.InvalidAmountException;
 
 public class CurrentAccount extends BankAccount {
 
-    private static final double MINIMUM_BALANCE = 1000.0;
+    private static final double INTEREST_RATE = 0.02;
 
     public CurrentAccount(
             int accountNumber,
@@ -31,13 +31,10 @@ public class CurrentAccount extends BankAccount {
             );
         }
 
-        if (getBalance() - amount
-                < MINIMUM_BALANCE) {
+        if (amount > getBalance()) {
 
             throw new InsufficientBalanceException(
-                    "Minimum balance of ₹"
-                    + MINIMUM_BALANCE
-                    + " must be maintained."
+                    "Insufficient balance."
             );
         }
 
@@ -46,12 +43,13 @@ public class CurrentAccount extends BankAccount {
         );
 
         addTransaction(
-                "WITHDRAW",
-                amount
+                TransactionType.WITHDRAW,
+                amount,
+                "Cash withdrawal"
         );
 
         System.out.println(
-                "Withdrawal successful."
+                "Amount withdrawn successfully."
         );
 
         System.out.println(
@@ -63,7 +61,7 @@ public class CurrentAccount extends BankAccount {
     @Override
     public double calculateInterest() {
 
-        return 0;
+        return getBalance() * INTEREST_RATE;
     }
 
     @Override
@@ -73,6 +71,13 @@ public class CurrentAccount extends BankAccount {
             throws InvalidAmountException,
                    InsufficientBalanceException {
 
+        if (receiver == null) {
+
+            throw new InvalidAmountException(
+                    "Receiver account cannot be null."
+            );
+        }
+
         if (amount <= 0) {
 
             throw new InvalidAmountException(
@@ -80,13 +85,10 @@ public class CurrentAccount extends BankAccount {
             );
         }
 
-        if (getBalance() - amount
-                < MINIMUM_BALANCE) {
+        if (amount > getBalance()) {
 
             throw new InsufficientBalanceException(
-                    "Transfer failed. Minimum balance of ₹"
-                    + MINIMUM_BALANCE
-                    + " must be maintained."
+                    "Insufficient balance for transfer."
             );
         }
 
@@ -95,15 +97,37 @@ public class CurrentAccount extends BankAccount {
         );
 
         addTransaction(
-                "TRANSFER TO ACCOUNT " +
-                receiver.getAccountNumber(),
-                amount
+                TransactionType.TRANSFER_SENT,
+                amount,
+                "To Account " +
+                receiver.getAccountNumber()
         );
 
-        receiver.deposit(amount);
+        receiver.addTransaction(
+                TransactionType.TRANSFER_RECEIVED,
+                amount,
+                "From Account " +
+                getAccountNumber()
+        );
+
+        receiver.setBalance(
+                receiver.getBalance() + amount
+        );
 
         System.out.println(
-                "Transfer successful."
+                "Transfer completed successfully."
+        );
+
+        System.out.println(
+                "Transferred ₹" +
+                amount +
+                " to Account " +
+                receiver.getAccountNumber()
+        );
+
+        System.out.println(
+                "Current balance: ₹" +
+                getBalance()
         );
     }
 }

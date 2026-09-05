@@ -60,7 +60,8 @@ public class InputValidator {
 
             System.out.print(message);
 
-            String value = scanner.nextLine().trim();
+            String value =
+                    scanner.nextLine().trim();
 
             if (!value.isEmpty()) {
                 return value;
@@ -68,6 +69,28 @@ public class InputValidator {
 
             System.out.println(
                     "Input cannot be empty."
+            );
+        }
+    }
+
+    public static String readPhoneNumber(
+            Scanner scanner,
+            String message) {
+
+        while (true) {
+
+            System.out.print(message);
+
+            String phone =
+                    scanner.nextLine().trim();
+
+            if (phone.matches("\\d{10}")) {
+                return phone;
+            }
+
+            System.out.println(
+                    "Invalid phone number. " +
+                    "Please enter exactly 10 digits."
             );
         }
     }

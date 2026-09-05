@@ -109,7 +109,7 @@ public class Main {
                 );
 
         String phone =
-                InputValidator.readString(
+                InputValidator.readPhoneNumber(
                         scanner,
                         "Enter phone number: "
                 );
@@ -335,7 +335,7 @@ public class Main {
                         scanner,
                         "Enter transfer amount: "
                 );
-                
+
             sender.transfer(
                     receiver,
                     amount

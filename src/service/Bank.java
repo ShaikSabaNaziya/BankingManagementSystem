@@ -90,6 +90,13 @@ public class Bank {
             return null;
         }
 
+        if (accountType == AccountType.CURRENT && initialDeposit < 1000) {
+            System.out.println(
+                    "Current Account requires a minimum initial deposit of 1000."
+            );
+            return null;
+        }
+
         int accountNumber = generateAccountNumber();
 
         BankAccount account;

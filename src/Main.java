@@ -10,6 +10,8 @@ import model.BankAccount;
 
 import service.Bank;
 
+import util.InputValidator;
+
 public class Main {
 
     public static void main(String[] args) {
@@ -24,11 +26,11 @@ public class Main {
 
             displayMenu();
 
-            System.out.print("Enter your choice: ");
-
-            int choice = scanner.nextInt();
-            scanner.nextLine();
-
+            int choice =
+                InputValidator.readInt(
+                        scanner,
+                        "Enter your choice: "
+                );
             switch (choice) {
 
                 case 1:
@@ -100,18 +102,27 @@ public class Main {
 
         System.out.println("\n===== CREATE ACCOUNT =====");
 
-        System.out.print("Enter customer name: ");
-        String name = scanner.nextLine();
+        String name =
+                InputValidator.readString(
+                        scanner,
+                        "Enter customer name: "
+                );
 
-        System.out.print("Enter phone number: ");
-        String phone = scanner.nextLine();
+        String phone =
+                InputValidator.readString(
+                        scanner,
+                        "Enter phone number: "
+                );
 
         System.out.println("\nSelect account type:");
         System.out.println("1. Savings");
         System.out.println("2. Current");
 
-        System.out.print("Enter choice: ");
-        int typeChoice = scanner.nextInt();
+        int typeChoice =
+                InputValidator.readInt(
+                        scanner,
+                        "Enter choice: "
+                );
 
         AccountType accountType;
 
@@ -132,8 +143,11 @@ public class Main {
             return;
         }
 
-        System.out.print("Enter initial deposit: ");
-        double initialDeposit = scanner.nextDouble();
+        double initialDeposit =
+                InputValidator.readDouble(
+                        scanner,
+                        "Enter initial deposit: "
+                );
 
         BankAccount account =
                 bank.createAccount(
@@ -162,7 +176,11 @@ public class Main {
                 "Enter account number: "
         );
 
-        int accountNumber = scanner.nextInt();
+        int accountNumber =
+                InputValidator.readInt(
+                        scanner,
+                        "Enter account number: "
+                );
 
         try {
 
@@ -173,8 +191,11 @@ public class Main {
                     "Enter amount: "
             );
 
-            double amount = scanner.nextDouble();
-
+            double amount =
+                InputValidator.readDouble(
+                        scanner,
+                        "Enter amount: "
+                );
             account.deposit(amount);
 
         } catch (AccountNotFoundException |
@@ -197,8 +218,11 @@ public class Main {
                 "Enter account number: "
         );
 
-        int accountNumber = scanner.nextInt();
-
+        int accountNumber =
+                InputValidator.readInt(
+                        scanner,
+                        "Enter account number: "
+                );
         try {
 
             BankAccount account =
@@ -208,7 +232,11 @@ public class Main {
                     "Enter amount: "
             );
 
-            double amount = scanner.nextDouble();
+            double amount =
+                InputValidator.readDouble(
+                        scanner,
+                        "Enter amount: "
+                );
 
             account.withdraw(amount);
 
@@ -274,13 +302,21 @@ public class Main {
                 "Enter sender account number: "
         );
 
-        int senderNumber = scanner.nextInt();
-
+        int senderNumber =
+                InputValidator.readInt(
+                        scanner,
+                        "Enter sender account number: "
+                );
+                
         System.out.print(
                 "Enter receiver account number: "
         );
 
-        int receiverNumber = scanner.nextInt();
+        int receiverNumber =
+                InputValidator.readInt(
+                        scanner,
+                        "Enter receiver account number: "
+                );
 
         try {
 
@@ -294,8 +330,12 @@ public class Main {
                     "Enter transfer amount: "
             );
 
-            double amount = scanner.nextDouble();
-
+            double amount =
+                InputValidator.readDouble(
+                        scanner,
+                        "Enter transfer amount: "
+                );
+                
             sender.transfer(
                     receiver,
                     amount
